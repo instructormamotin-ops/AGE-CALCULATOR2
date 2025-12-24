@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator AI Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 30px;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 30px;
+            border-right: 1px solid #eee;
+        }
+        
+        .result-section {
+            flex: 1;
+            min-width: 300px;
+            padding-left: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #2575fc;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+        
+        input[type="date"]:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(37, 117, 252, 0.3);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .age-display {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #f8f9ff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .age-value {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #2575fc;
+            line-height: 1;
+            margin: 15px 0;
+        }
+        
+        .age-unit {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .age-breakdown {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .breakdown-item {
+            flex: 1;
+            min-width: 120px;
+            background-color: #f8f9ff;
+            padding: 20px 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .breakdown-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #6a11cb;
+            margin-bottom: 5px;
+        }
+        
+        .breakdown-label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .insights {
+            background-color: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .insight-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .insight-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .insight-icon {
+            background-color: #2575fc;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .insight-text {
+            font-size: 1rem;
+            color: #555;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            background-color: #f8f9ff;
+        }
+        
+        .ai-badge {
+            display: inline-block;
+            background: linear-gradient(to right, #ff5e62, #ff9966);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .input-section, .result-section {
+                padding: 0;
+                border: none;
+            }
+            
+            .input-section {
+                margin-bottom: 30px;
+            }
+            
+            .age-value {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Age Calculator AI Tool <span class="ai-badge">AI-Powered</span></h1>
+            <p>Calculate your exact age with detailed breakdown and insights</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-calculator"></i> Calculate Your Age</h2>
+                
+                <div class="input-group">
+                    <label for="birthdate"><i class="fas fa-birthday-cake"></i> Your Birthdate</label>
+                    <input type="date" id="birthdate" max="">
+                </div>
+                
+                <div class="input-group">
+                    <label for="target-date"><i class="fas fa-calendar-alt"></i> Calculate Age As Of (Optional)</label>
+                    <input type="date" id="target-date">
+                </div>
+                
+                <button class="calculate-btn" id="calculate-btn">
+                    <i class="fas fa-calculator"></i> Calculate Age
+                </button>
+                
+                <div class="insights" style="margin-top: 30px;">
+                    <h3><i class="fas fa-lightbulb"></i> How It Works</h3>
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-robot"></i></div>
+                        <div class="insight-text">This AI tool calculates your exact age by comparing dates with precision.</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-chart-bar"></i></div>
+                        <div class="insight-text">Get a detailed breakdown of your age in years, months, weeks, and days.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="result-section">
+                <h2 class="section-title"><i class="fas fa-chart-pie"></i> Your Age Results</h2>
+                
+                <div class="age-display">
+                    <div class="age-unit">Your Age Is</div>
+                    <div class="age-value" id="age-result">--</div>
+                    <div class="age-unit" id="age-unit">years</div>
+                </div>
+                
+                <h3 class="section-title"><i class="fas fa-th-list"></i> Detailed Breakdown</h3>
+                
+                <div class="age-breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="years">--</div>
+                        <div class="breakdown-label">Years</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="months">--</div>
+                        <div class="breakdown-label">Months</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="weeks">--</div>
+                        <div class="breakdown-label">Weeks</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-value" id="days">--</div>
+                        <div class="breakdown-label">Days</div>
+                    </div>
+                </div>
+                
+                <div class="insights">
+                    <h3><i class="fas fa-magic"></i> AI Insights</h3>
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-heart"></i></div>
+                        <div class="insight-text" id="insight-1">Enter your birthdate to see personalized insights.</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-calendar-check"></i></div>
+                        <div class="insight-text" id="insight-2">Calculate age for any target date in the past or present.</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon"><i class="fas fa-star"></i></div>
+                        <div class="insight-text" id="insight-3">Discover interesting facts about your age.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Age Calculator AI Tool &copy; 2023 | Calculates precise age with detailed breakdown</p>
+        </div>
+    </div>
+
+    <script>
+        // Set max dates to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('birthdate').max = today;
+            document.getElementById('target-date').max = today;
+            document.getElementById('target-date').value = today;
+        });
+        
+        // Calculate age when button is clicked
+        document.getElementById('calculate-btn').addEventListener('click', calculateAge);
+        
+        // Also calculate when Enter is pressed in date fields
+        document.getElementById('birthdate').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateAge();
+        });
+        
+        document.getElementById('target-date').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateAge();
+        });
+        
+        function calculateAge() {
+            const birthdateInput = document.getElementById('birthdate').value;
+            const targetDateInput = document.getElementById('target-date').value;
+            
+            // Validate input
+            if (!birthdateInput) {
+                alert('Please enter your birthdate');
+                return;
+            }
+            
+            const birthdate = new Date(birthdateInput);
+            const targetDate = targetDateInput ? new Date(targetDateInput) : new Date();
+            
+            // Validate dates
+            if (birthdate > targetDate) {
+                alert('Birthdate cannot be in the future');
+                return;
+            }
+            
+            // Calculate age in years
+            let years = targetDate.getFullYear() - birthdate.getFullYear();
+            let months = targetDate.getMonth() - birthdate.getMonth();
+            let days = targetDate.getDate() - birthdate.getDate();
+            
+            // Adjust for negative months or days
+            if (days < 0) {
+                months--;
+                // Get days in the previous month
+                const lastMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+                days += lastMonth.getDate();
+            }
+            
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            // Calculate total days
+            const timeDiff = targetDate.getTime() - birthdate.getTime();
+            const totalDays = Math.floor(timeDiff / (1000 * 3600 * 24));
+            
+            // Calculate total weeks
+            const totalWeeks = Math.floor(totalDays / 7);
+            
+            // Calculate total months
+            const totalMonths = years * 12 + months;
+            
+            // Update the UI with results
+            document.getElementById('age-result').textContent = years;
+            document.getElementById('years').textContent = years;
+            document.getElementById('months').textContent = totalMonths;
+            document.getElementById('weeks').textContent = totalWeeks;
+            document.getElementById('days').textContent = totalDays;
+            
+            // Generate AI insights
+            generateInsights(birthdate, targetDate, years, totalMonths, totalDays);
+        }
+        
+        function generateInsights(birthdate, targetDate, years, months, days) {
+            const insight1 = document.getElementById('insight-1');
+            const insight2 = document.getElementById('insight-2');
+            const insight3 = document.getElementById('insight-3');
+            
+            // Clear previous insights
+            insight1.textContent = '';
+            insight2.textContent = '';
+            insight3.textContent = '';
+            
+            // Insight 1: Age category
+            let ageCategory = '';
+            if (years < 1) ageCategory = 'an infant';
+            else if (years < 3) ageCategory = 'a toddler';
+            else if (years < 13) ageCategory = 'a child';
+            else if (years < 20) ageCategory = 'a teenager';
+            else if (years < 40) ageCategory = 'a young adult';
+            else if (years < 65) ageCategory = 'middle-aged';
+            else ageCategory = 'a senior';
+            
+            insight1.textContent = `You are ${ageCategory}.`;
+            
+            // Insight 2: Next birthday
+            const nextBirthday = new Date(targetDate.getFullYear(), birthdate.getMonth(), birthdate.getDate());
+            if (nextBirthday < targetDate) {
+                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+            }
+            
+            const daysToBirthday = Math.ceil((nextBirthday.getTime() - targetDate.getTime()) / (1000 * 3600 * 24));
+            const nextBirthdayStr = nextBirthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            insight2.textContent = `Your next birthday is in ${daysToBirthday} days on ${nextBirthdayStr}.`;
+            
+            // Insight 3: Interesting fact
+            const facts = [
+                `You've lived approximately ${Math.round(days/30)} months or ${Math.round(days/7)} weeks.`,
+                `You've witnessed about ${Math.round(years * 365.25)} sunrises and sunsets.`,
+                `Your heart has beaten roughly ${Math.round(days * 24 * 60 * 70)} times (at 70 bpm).`,
+                `You've been alive for ${Math.round(days * 24)} hours or ${Math.round(days * 24 * 60)} minutes.`,
+                `You're part of the ${birthdate.getFullYear()} generation!`
+            ];
+            
+            // Select a random fact
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
+            insight3.textContent = randomFact;
+        }
+        
+        // Calculate age on page load with a default date (20 years ago)
+        window.onload = function() {
+            const defaultDate = new Date();
+            defaultDate.setFullYear(defaultDate.getFullYear() - 20);
+            document.getElementById('birthdate').valueAsDate = defaultDate;
+            calculateAge();
+        };
+    </script>
+</body>
+</html>
